@@ -11,7 +11,7 @@
 ChainableLED LED (3,4,1);
 
 void setup() {
-  // put your setup code here, to run once:
+  //Initialisation de la LED
   LED.init();
   //Serial.begin(9600);
   printf("%c",Bouton1);
@@ -20,7 +20,6 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   LED.setColorRGB(0,255,0,255);
 }
 
