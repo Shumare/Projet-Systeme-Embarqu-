@@ -1,7 +1,5 @@
 #include "Variable.h"
 
-
-
 ISR(TIMER1_COMPA_vect) {
   if((flag1 || flag2) == 1 && mode != 1) {
     if(Compteur) {
@@ -26,10 +24,10 @@ void init_timer(long uSecs) {
   TCCR1B = 0;
   TCNT1 = 0;
   OCR1A = ((16e6 / 256L * uSecs) / (1e6) )- 1;
-  TCCR1B |= (1 << WGM12);   
-  TCCR1B |= (1 << CS12);     
-  TIMSK1 |= (1 << OCIE1A);  
-  interrupts();  
+  TCCR1B |= (1 << WGM12);
+  TCCR1B |= (1 << CS12);
+  TIMSK1 |= (1 << OCIE1A);
+  interrupts();
 }
 
 void switchMode1() {
@@ -40,20 +38,22 @@ void switchMode1() {
       if(mode == (0 || 3)) {
         mode = 2;
         LED.setColorRGB(0,255,165,0);
-        return;
       } else if(mode == 2) {
         mode = 0;
         LED.setColorRGB(0,0,255,0);
-        return;
-      } 
+      }
     }
+    return;
+  }
+
+  if (flag1 == 1 && flag2 == 0) {
     mode = 1;
     LED.setColorRGB(0,255,255,0);
-    Compteur = 30 * 1000 * 60; 
+    Compteur = 30 * 1e6 * 60;
     return;
-       
   }
-   
+
+
   if(flag1 == 0){
     Compteur = 5000;
     flag1 = 1;
@@ -64,7 +64,7 @@ void switchMode1() {
 
 void switchMode2() {
 
-   if(flag2 == 1 && flag1 == 0) {
+  if(flag2 == 1 && flag1 == 0) {
     flag2 = 0;
     flag1 = 0;
     if(Compteur == 0) {
@@ -74,7 +74,7 @@ void switchMode2() {
       } else if(mode == 3) {
         mode = 0;
         LED.setColorRGB(0,0,255, 0);
-      } 
+      }
     }
     return;
   }
@@ -106,7 +106,6 @@ void setup() {
 
   init_Interrupt();
 
-  
 }
 
 void loop() {

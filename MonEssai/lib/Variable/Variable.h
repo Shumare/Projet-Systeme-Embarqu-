@@ -11,7 +11,6 @@
 
 const int Bouton1 = 3; //Bouton rouge
 const int Bouton2 = 2; //Bouton vert
-const int 
 
 volatile unsigned long Compteur = 5000;
 
