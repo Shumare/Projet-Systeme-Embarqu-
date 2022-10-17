@@ -6,11 +6,15 @@
 
 #include "Arduino.h"
 #include "string.h"
+//#include "avr8-stub.h"
+#include "ChainableLED.h"
+//#include "DS1307.h"
+#include "SoftwareSerial.h"
 
 const int Bouton1 = 3; //Bouton rouge
 const int Bouton2 = 2; //Bouton vert
 
-volatile unsigned int Compteur = 5000;
+volatile unsigned long Compteur = 5000;
 
 //capteurs
 typedef struct capt {
