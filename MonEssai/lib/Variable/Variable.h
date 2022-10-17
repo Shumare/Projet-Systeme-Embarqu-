@@ -2,6 +2,10 @@
 #define Variable_H_INCLUDED
 #include "Arduino.h"
 #include "string.h"
+//#include "avr8-stub.h"
+#include "ChainableLED.h"
+//#include "DS1307.h"
+#include "SoftwareSerial.h"
 
 
 
@@ -9,7 +13,7 @@ const int Bouton1 = 3; //Bouton rouge
 const int Bouton2 = 2; //Bouton vert
 const int 
 
-unsigned int Compteur = 5000;
+volatile unsigned long Compteur = 5000;
 
 //capteurs
 typedef struct capt {
@@ -29,11 +33,11 @@ capteur Capt_Hygr;
 capteur Capt_GPS;
 
 //volatile
-volatile int flag1;
-volatile int flag2;
-volatile int mode;
+volatile int flag1 = 0;
+volatile int flag2 = 0;
+volatile int mode = 0;
 
-ChainableLED LED (3,4,1);
+ChainableLED LED (7,8,1);
 
 
 
