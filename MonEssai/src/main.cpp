@@ -5,7 +5,7 @@
 #include "SoftwareSerial.h"
 #include "Variable.h"
 
-ChainableLED LED (3,4,1);
+
 
 ISR(TIMER1_COMPA_vect) {
   if((flag1 || flag2) == 1 && mode != 1) {
@@ -29,8 +29,11 @@ void init_timer(long uSec) {
   TCCR1A = 0;
   TCCR1B = 0;
   TCNT1 = 0;
-  OCR1A = (16e6/(256+uSec));
-
+  OCR1A = ((16e6 / 256L * uSecs) / (1e6) )- 1;
+  TCCR1B |= (1 << WGM12);   
+  TCCR1B |= (1 << CS12);     
+  TIMSK1 |= (1 << OCIE1A);  
+  interrupts();  
 }
 
 

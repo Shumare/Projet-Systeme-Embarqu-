@@ -34,6 +34,8 @@ volatile int flag1;
 volatile int flag2;
 volatile int mode;
 
+ChainableLED LED (3,4,1);
+
 
 
 
