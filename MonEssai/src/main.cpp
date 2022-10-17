@@ -5,10 +5,34 @@
 #include "SoftwareSerial.h"
 #include "Variable.h"
 
-
-
-
 ChainableLED LED (3,4,1);
+
+ISR(TIMER1_COMPA_vect) {
+  if((flag1 || flag2) == 1 && mode != 1) {
+    if(Compteur) {
+      Compteur--;
+    }
+  }
+
+  if(mode == 1) {
+    if(Compteur) {
+      Compteur--;
+    } else {
+      mode = 0;
+      reactiveCapt();
+    }
+  }
+}
+
+void init_timer(long uSec) {
+  noInterrupts();
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCNT1 = 0;
+  OCR1A = (16e6/(256+uSec));
+
+}
+
 
 void setup() {
   //Initialisation de la LED

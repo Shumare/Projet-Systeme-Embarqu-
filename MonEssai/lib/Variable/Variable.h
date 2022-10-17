@@ -10,6 +10,8 @@
 const int Bouton1 = 3; //Bouton rouge
 const int Bouton2 = 2; //Bouton vert
 
+unsigned int Compteur = 5000;
+
 //capteurs
 typedef struct capt {
     unsigned short port;
@@ -31,6 +33,8 @@ capteur Capt_GPS;
 volatile int flag1;
 volatile int flag2;
 volatile int mode;
+
+
 
 
 #endif
