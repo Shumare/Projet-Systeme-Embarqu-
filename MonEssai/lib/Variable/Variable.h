@@ -4,7 +4,6 @@
 #include "string.h"
 //#include "avr8-stub.h"
 #include "ChainableLED.h"
-#include <Wire.h>
 #include "DS1307.h"
 #include "SoftwareSerial.h"
 #include <SPI.h>
@@ -16,8 +15,8 @@
 
 SoftwareSerial SoftSerial(4, 5);
 
-const int Bouton1 = 2; //Bouton rouge
-const int Bouton2 = 3; //Bouton vert
+const int Bouton1 = 3; //Bouton rouge
+const int Bouton2 = 2; //Bouton vert
 
 volatile unsigned long Compteur = 5000;
 

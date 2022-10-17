@@ -146,6 +146,12 @@ String getTime()
 
 
 void setup() {
+  pinMode(Bouton1, INPUT);
+  pinMode(Bouton2, INPUT);
+
+  init_timer(5000);
+
+  init_Interrupt();
   // Initialisation du port série (pour l'envoi d'infos via le moniteur série de l'IDE Arduino)
   Serial.begin(9600);
   while(!Serial);
