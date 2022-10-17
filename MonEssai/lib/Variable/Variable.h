@@ -4,15 +4,21 @@
 #include "string.h"
 //#include "avr8-stub.h"
 #include "ChainableLED.h"
-//#include "DS1307.h"
+#include "DS1307.h"
 #include "SoftwareSerial.h"
+// Constantes du programme
+#define adresseI2CduBME280                0x76            // Adresse I2C du BME280 (0x76, dans mon cas, ce qui est souvent la valeur par défaut)
+#define pressionAuNiveauDeLaMerEnHpa      1024.90         // (1013.25 hPa en moyenne, valeur "par défaut")
+#define delaiRafraichissementAffichage    1500            // Délai de rafraîchissement de l'affichage (en millisecondes)
 
-
+SoftwareSerial SoftSerial(4, 5);
 
 const int Bouton1 = 2; //Bouton rouge
 const int Bouton2 = 3; //Bouton vert
 
 volatile unsigned long Compteur = 5000;
+
+
 
 //capteurs
 typedef struct capt {

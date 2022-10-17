@@ -1,13 +1,9 @@
 #include "Variable.h"
 #include <Adafruit_BME280.h>                            // Inclusion de la librairie BME280 d'Adafruit
 
-// Constantes du programme
-#define adresseI2CduBME280                0x76            // Adresse I2C du BME280 (0x76, dans mon cas, ce qui est souvent la valeur par défaut)
-#define pressionAuNiveauDeLaMerEnHpa      1024.90         // https://fr.wikipedia.org/wiki/Pression_atmospherique (1013.25 hPa en moyenne, valeur "par défaut")
-#define delaiRafraichissementAffichage    1500            // Délai de rafraîchissement de l'affichage (en millisecondes)
-
 // Instanciation de la librairie BME280
 Adafruit_BME280 bme;
+DS1307 clock;
 
 ISR(TIMER1_COMPA_vect) {
   if((flag1 || flag2) == 1 && mode != 1) {
@@ -102,6 +98,52 @@ void init_Interrupt() {
   attachInterrupt(digitalPinToInterrupt(Bouton2),switchMode2,CHANGE);
 }
 
+String getTime()
+{
+    String time="";
+    clock.getTime();
+    time+=String(clock.hour, DEC);
+    time+=String(":");
+    time+=String(clock.minute, DEC);
+    time+=String(":");
+    time+=String(clock.second, DEC);
+    time+=String("  ");
+    time+=String(clock.month, DEC);
+    time+=String("/");
+    time+=String(clock.dayOfMonth, DEC);
+    time+=String("/");
+    time+=String(clock.year+2000, DEC);
+    time+=String(" ");
+    time+=String(clock.dayOfMonth);
+    time+=String("*");
+    switch (clock.dayOfWeek)// Friendly printout the weekday
+    {
+        case MON:
+        time+=String("MON");
+        break;
+        case TUE:
+        time+=String("TUE");
+        break;
+        case WED:
+        time+=String("WED");
+        break;
+        case THU:
+        time+=String("THU");
+        break;
+        case FRI:
+        time+=String("FRI");
+        break;
+        case SAT:
+        time+=String("SAT");
+        break;
+        case SUN:
+        time+=String("SUN");
+        break;
+    }
+    time+=String(" ");
+    return time;
+}
+
 
 void setup() {
   // Initialisation du port série (pour l'envoi d'infos via le moniteur série de l'IDE Arduino)
@@ -122,6 +164,17 @@ void setup() {
     Serial.println(F("--> RÉUSSIE !"));
   }
   Serial.println();
+  pinMode(4, INPUT);
+  pinMode(5, OUTPUT);
+
+  SoftSerial.begin(9600);
+
+  //Initialize Clock
+  clock.begin();
+  clock.fillByYMD(2013,1,19);//Jan 19,2013
+  clock.fillByHMS(15,28,30);//15:28 30"
+  clock.fillDayOfWeek(SAT);//Saturday
+  clock.setTime();//write time to the RTC chip
 }
 
 /*
@@ -145,6 +198,8 @@ void loop() {
 
   appelMode();
 */
+  String dataString = getTime() + " ; ";
+  Serial.println(dataString);
   // Affichage de la TEMPÉRATURE
   Serial.print(F("Température = "));
   Serial.print(bme.readTemperature());
@@ -164,6 +219,20 @@ void loop() {
   Serial.print(F("Altitude estimée = "));
   Serial.print(bme.readAltitude(pressionAuNiveauDeLaMerEnHpa));
   Serial.println(F(" m"));
+
+    // GPS Reading
+  String gpsData = "";
+  if (SoftSerial.available())                     // if data is coming from software serial port ==> data is coming from SoftSerial GPS
+  {
+      bool t=true;
+      while(t){
+        gpsData = SoftSerial.readStringUntil('\n');
+        if (gpsData.startsWith("$GPGGA",0)){
+          t=false;
+        }
+      }
+  }
+  Serial.println(gpsData);
 
 
   // ... et on répète ce cycle à l'infini !
