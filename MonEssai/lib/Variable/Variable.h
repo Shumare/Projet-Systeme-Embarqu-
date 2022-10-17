@@ -4,8 +4,11 @@
 #include "string.h"
 //#include "avr8-stub.h"
 #include "ChainableLED.h"
+#include <Wire.h>
 #include "DS1307.h"
 #include "SoftwareSerial.h"
+#include <SPI.h>
+#include <SD.h>
 // Constantes du programme
 #define adresseI2CduBME280                0x76            // Adresse I2C du BME280 (0x76, dans mon cas, ce qui est souvent la valeur par défaut)
 #define pressionAuNiveauDeLaMerEnHpa      1024.90         // (1013.25 hPa en moyenne, valeur "par défaut")
@@ -17,8 +20,6 @@ const int Bouton1 = 2; //Bouton rouge
 const int Bouton2 = 3; //Bouton vert
 
 volatile unsigned long Compteur = 5000;
-
-
 
 //capteurs
 typedef struct capt {
@@ -35,7 +36,6 @@ capteur Capt_Pression;
 capteur Capt_Lumin;
 capteur Capt_Temp;
 capteur Capt_Hygr;
-capteur Capt_GPS;
 
 //volatile
 volatile int flag1 = 0;
