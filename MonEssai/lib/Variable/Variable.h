@@ -1,5 +1,6 @@
 #ifndef Variable_H_INCLUDED
 #define Variable_H_INCLUDED
+
 #include "Arduino.h"
 #include "string.h"
 //#include "avr8-stub.h"

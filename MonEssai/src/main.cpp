@@ -36,42 +36,35 @@ void init_timer(long uSecs) {
 }
 
 void switchMode1() {
-  if(flag1 == 1 && flag2==0) {
-    flag1 = 0;
-    flag2 = 0;
+
+  if (flag1 == 1) {
+    flag1 = !digitalRead(Bouton1);
     if(Compteur == 0) {
-      if(mode == (0 || 3)) {
+      if(mode == 0 || mode == 3) {
         mode = 2;
-        LED.setColorRGB(0,255,165,0);
+        LED.setColorRGB(0,255,30,0);
       } else if(mode == 2) {
         mode = 0;
-        LED.setColorRGB(0,0,255,0);
+        LED.setColorRGB(0,0,255, 0);
       }
+      return;
     }
-    return;
-  }
-
-  if (flag1 == 1 && flag2 == 0) {
     mode = 1;
     LED.setColorRGB(0,255,255,0);
-    Compteur = 30 * 1e6 * 60;
     return;
   }
 
 
-  if(flag1 == 0){
+  if (flag1 == 0) {
+    flag1 = !digitalRead(Bouton1);
     Compteur = 5000;
-    flag1 = 1;
-    flag2 = 0;
   }
 
 }
 
 void switchMode2() {
-
-  if(flag2 == 1 && flag1 == 0) {
-    flag2 = 0;
-    flag1 = 0;
+  if (flag2 == 1) {
+    flag2 = !digitalRead(Bouton2);
     if(Compteur == 0) {
       if(mode == 0) {
         mode = 3;
@@ -84,10 +77,9 @@ void switchMode2() {
     return;
   }
 
-  if(flag2 == 0) {
+  if (flag2 == 0) {
+    flag2 = !digitalRead(Bouton2);
     Compteur = 5000;
-    flag2 = 1;
-    flag1 = 0;
   }
 
 }
@@ -146,14 +138,16 @@ String getTime()
 
 
 void setup() {
+  // Initialisation du port série (pour l'envoi d'infos via le moniteur série de l'IDE Arduino)
+  Serial.begin(9600);
+  LED.init();
   pinMode(Bouton1, INPUT);
   pinMode(Bouton2, INPUT);
 
-  init_timer(5000);
+  init_timer(1000);
 
   init_Interrupt();
-  // Initialisation du port série (pour l'envoi d'infos via le moniteur série de l'IDE Arduino)
-  Serial.begin(9600);
+  
   while(!Serial);
   Serial.println("Programme de test du BME280");
   Serial.println("===========================");
@@ -193,13 +187,19 @@ void appelMode() {
 }*/
 
 void loop() {
-  /*
+  
   delay(1000);
   Serial.println(Compteur);
   Serial.println(mode);
+  Serial.print("port : ");
+  Serial.println(flag1);
+  Serial.print("port : ");
+  Serial.println(flag2);
+  Serial.print("mode : ");
+  Serial.println(mode);
 
+/*
   appelMode();
-*/
   String dataString = getTime() + " ; ";
   Serial.println(dataString);
   // Affichage de la TEMPÉRATURE
@@ -239,7 +239,7 @@ void loop() {
 
   // ... et on répète ce cycle à l'infini !
   delay(delaiRafraichissementAffichage);                // Avec x secondes d'attente, avant chaque rebouclage
-  Serial.println(); 
+  Serial.println(); */
 
 }
 
