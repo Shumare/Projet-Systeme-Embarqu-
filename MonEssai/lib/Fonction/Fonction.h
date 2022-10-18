@@ -9,6 +9,7 @@
 
 String getTime();
 void enterNewParam();
+void checkParam(char capteurModif, float valeurModif);
 void configEEPROM();
 void resetEEPROM();
 #endif
