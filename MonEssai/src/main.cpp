@@ -37,15 +37,16 @@ void init_timer(long uSecs) {
 
 void switchMode1() {
 
-  if (flag1 == 1) {
+  if (flag1 == 1 && mode != 1) {
     flag1 = !digitalRead(Bouton1);
-    if(Compteur == 0) {
-      if(mode == 0 || mode == 3) {
-        mode = 2;
-        LED.setColorRGB(0,255,30,0);
-      } else if(mode == 2) {
+    if (Compteur == 0) {
+      if(mode == 2) {
         mode = 0;
         LED.setColorRGB(0,0,255, 0);
+      }
+      if(mode == 0 || mode == 3) {
+        mode = 2;
+        LED.setColorRGB(0,255,40,0);
       }
       return;
     }
@@ -56,7 +57,7 @@ void switchMode1() {
   }
 
 
-  if (flag1 == 0) {
+  if (flag1 == 0 && mode != 1) {
     flag1 = !digitalRead(Bouton1);
     Compteur = 5000;
   }
@@ -64,7 +65,7 @@ void switchMode1() {
 }
 
 void switchMode2() {
-  if (flag2 == 1) {
+  if (flag2 == 1 && mode != 1) {
     flag2 = !digitalRead(Bouton2);
     if(Compteur == 0) {
       if(mode == 0) {
@@ -78,7 +79,7 @@ void switchMode2() {
     return;
   }
 
-  if (flag2 == 0) {
+  if (flag2 == 0 && mode != 1) {
     flag2 = !digitalRead(Bouton2);
     Compteur = 5000;
   }
@@ -142,8 +143,8 @@ void setup() {
   // Initialisation du port série (pour l'envoi d'infos via le moniteur série de l'IDE Arduino)
   Serial.begin(9600);
   LED.init();
-  pinMode(Bouton1, INPUT);
-  pinMode(Bouton2, INPUT);
+  pinMode(Bouton1, INPUT_PULLUP);
+  pinMode(Bouton2, INPUT_PULLUP);
 
   init_timer(1000);
 
