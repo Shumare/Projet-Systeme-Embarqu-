@@ -1,6 +1,5 @@
 #ifndef Fonction_H_INCLUDED
 #define Fonction_H_INCLUDED
-
 #include "Variable.h"
 
 //void enterNewParam();
@@ -9,6 +8,4 @@
 //float demandeDonnee(int port);
 
 String getTime();
-
-
 #endif
