@@ -38,6 +38,7 @@ typedef struct capt {
     int maxCapteur;
     int minActuel;
     int maxActuel;
+    String name;
     struct capt *next;
 } capteur;
 
@@ -57,6 +58,7 @@ volatile bool flag1 = 0;
 volatile bool flag2 = 0;
 volatile bool ActiveTimeOut = 0;
 volatile int mode = 0;
+volatile int mode_prece = 0;
 volatile unsigned long Compteur = 5000;
 
 // variable globale classique

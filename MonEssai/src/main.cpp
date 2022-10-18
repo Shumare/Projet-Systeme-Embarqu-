@@ -14,9 +14,14 @@ ISR(TIMER1_COMPA_vect){
     } else {
       mode = 0;
       LED.setColorRGB(0,0,255, 0);
-      //reactiveCapt();
+      reactiveCapteur();
     }
   }
+
+  if (ActiveTimeOut) {
+    Compteur--;
+  }
+
 }
 
 void init_timer(long uSecs){
@@ -33,29 +38,39 @@ void init_timer(long uSecs){
 
 void switchMode1(){
 
-  if (flag1 == 1 && mode != 1) {
+  if (digitalRead(Bouton1) && mode != 1) {
     flag1 = !digitalRead(Bouton1);
     if (Compteur == 0) {
-      if(mode == 2) {
-        mode = 0;
-        LED.setColorRGB(0,0,255, 0);
+      if (mode == 2) {
+        mode = mode_prece;
+        if (mode == 0) {
+          LED.setColorRGB(0,0,255, 0);
+        } else {
+          LED.setColorRGB(0,0,0,255);
+        }
       }
-      if(mode == 0 || mode == 3) {
+      else if (mode == 0 || mode == 3) {
+        mode_prece = mode;
         mode = 2;
         LED.setColorRGB(0,255,40,0);
       }
       return;
     }
+  }
+
+  if (flag1 == 1 && mode != 1) {
+    flag1 = !digitalRead(Bouton1);
     mode = 1;
     LED.setColorRGB(0, 255, 255, 0);
-    Compteur = 30 * 60 * 1e6;
+    Compteur = 30 * 60;
     return;
   }
 
 
   if (flag1 == 0 && mode != 1) {
     flag1 = !digitalRead(Bouton1);
-    Compteur = 5000;
+    flag2 = 0;
+    Compteur = 5;
   }
 
 }
@@ -77,7 +92,8 @@ void switchMode2(){
 
   if (flag2 == 0 && mode != 1) {
     flag2 = !digitalRead(Bouton2);
-    Compteur = 5000;
+    flag1 = 0;
+    Compteur = 5;
   }
 
 }
@@ -103,17 +119,14 @@ void setup(){
 
   init_Interrupt();
 
+  initCapteur();
+
   Serial.print("Initializing SD card...");
   if (!SD.begin(chipSelect)) {
     Serial.println("Card failed, or not present");
     while (1);
   }
   Serial.println("card initialized.");
-
-  while(!Serial);
-  Serial.println("Programme de test du BME280");
-  Serial.println("===========================");
-  Serial.println();
 
   // Initialisation du BME280
   Serial.print(F("Initialisation du BME280, à l'adresse [0x"));
@@ -134,7 +147,18 @@ void setup(){
   clock.begin();
 }
 
-/*
+void Configuration() {
+  desactiveCapteur();
+  enterNewParam();
+}
+
+void Standard() {}
+
+void Economique() {}
+
+void Maintenance(){}
+
+
 void appelMode() {
   if (mode == 0) {
     Standard();
@@ -145,12 +169,12 @@ void appelMode() {
   } else if (mode == 3) {
     Economique();
   }
-}*/
+}
 
 void loop(){
 
-/*
-  appelMode();*/
+
+  appelMode();/*
   String dataString = getTime() + " ; ";
   Serial.println(dataString);
   // Affichage de la TEMPÉRATURE
@@ -191,6 +215,6 @@ void loop(){
   // ... et on répète ce cycle à l'infini !
   delay(delaiRafraichissementAffichage);                // Avec x secondes d'attente, avant chaque rebouclage
   Serial.println(); 
-
+*/
 }
 

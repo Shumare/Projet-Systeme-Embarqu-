@@ -86,10 +86,24 @@ void configEEPROM2(){
 void enterNewParam(){
     char capteurModif;
     float valeurModif;
-    printf("\nVeillez entrer le capteur qui doit etre modifiÃ©: ");
-    scanf("%c", capteurModif);
-    printf("\nVeillez entrer la nouvelle valeur : ");
-    scanf("%f", valeurModif);
+    bool ecrit = false;
+    Serial.print("Veillez entrer le capteur qui doit etre modifie: ");
+    while(ecrit != true){
+        if(Serial.available() > 0) {
+            capteurModif = Serial.read();
+            ecrit = true;
+        }
+    }
+    ecrit = false;
+    Serial.println("");
+    Serial.print("Veillez entrer la nouvelle valeur : ");
+    while(ecrit != true) {
+        if (Serial.available() > 0) {
+            valeurModif = Serial.parseInt();
+            ecrit = true;
+        }
+    }
+    Serial.println("");
 }
 
 void checkParam(char capteurModif, float valeurModif){
@@ -342,4 +356,18 @@ String demandeDonnee(capteur *Capt) {
             return String(bme.readTemperature(), DEC);
         }
     }
+}
+
+void desactiveCapteur(){
+  Capt_Hygr->active = 0;
+  Capt_Lumin->active = 0;
+  Capt_Pression->active = 0;
+  Capt_Temp->active = 0;
+}
+
+void reactiveCapteur(){
+  Capt_Hygr->active = 1;
+  Capt_Lumin->active = 1;
+  Capt_Pression->active = 1;
+  Capt_Temp->active = 1;
 }
