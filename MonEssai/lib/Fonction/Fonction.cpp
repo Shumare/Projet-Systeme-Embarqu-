@@ -3,7 +3,7 @@
 
 #include "Fonction.h"
 
-
+/*
 void enterNewParam(){
     char capteurModif;
     float valeurModif;
@@ -25,37 +25,38 @@ void resetEEPROM() {
       address++;
       delay(100);
    }
-}
+}*/
 void initCapteur(){
-Capt_Pression->active = 1;
-Capt_Lumin->active = 1;
-Capt_Temp->active = 1;
-Capt_Hygr->active = 1;
+    Capt_Pression->active = 1;
+    Capt_Lumin->active = 1;
+    Capt_Temp->active = 1;
+    Capt_Hygr->active = 1;
 
-Capt_Pression -> min = 850;
-Capt_Pression -> max = 1080;
-Capt_Lumin -> min = 256;
-Capt_Lumin -> max = 768;
-Capt_Temp -> min = -10;
-Capt_Temp -> max = 60;
-Capt_Hygr -> min = 0;
-Capt_Hygr -> max = 50;
+    Capt_Pression -> min = 850;
+    Capt_Pression -> max = 1080;
+    Capt_Lumin -> min = 256;
+    Capt_Lumin -> max = 768;
+    Capt_Temp -> min = -10;
+    Capt_Temp -> max = 60;
+    Capt_Hygr -> min = 0;
+    Capt_Hygr -> max = 50;
 
-Capt_Pression -> minCapteur = 300;
-Capt_Pression -> maxCapteur = 1100;
-Capt_Lumin -> minCapteur = 0;
-Capt_Lumin -> maxCapteur = 1023;
-Capt_Temp -> minCapteur = -40;
-Capt_Temp -> maxCapteur = 85;
-Capt_Hygr -> minCapteur = -40;
-Capt_Hygr-> maxCapteur = 85;
+    Capt_Pression -> minCapteur = 300;
+    Capt_Pression -> maxCapteur = 1100;
+    Capt_Lumin -> minCapteur = 0;
+    Capt_Lumin -> maxCapteur = 1023;
+    Capt_Temp -> minCapteur = -40;
+    Capt_Temp -> maxCapteur = 85;
+    Capt_Hygr -> minCapteur = -40;
+    Capt_Hygr-> maxCapteur = 85;
 
-Capt_Pression -> next = Capt_Lumin;
-Capt_Lumin -> next = Capt_Temp;
-Capt_Temp -> next = Capt_Hygr;
-Capt_Hygr-> next = NULL;
+    Capt_Pression -> next = Capt_Lumin;
+    Capt_Lumin -> next = Capt_Temp;
+    Capt_Temp -> next = Capt_Hygr;
+    Capt_Hygr-> next = NULL;
 }
 
+/*
 void configEEPROM(capteur *E,int addresse){
     if(E != NULL) {
         if(EEPROM.read (addresse) == 255){
@@ -77,9 +78,9 @@ void configEEPROM(capteur *E,int addresse){
             }
         } 
     configEEPROM(E-> next,addresse);
+    }
 }
-}
-
+*/
 
 String getTime(){
     String time="";
@@ -124,4 +125,60 @@ String getTime(){
     }
     time+=String(" ");
     return time;
+}
+
+void stockSD(String stockage) {
+    //création du nom de fichier
+    clock.getTime();
+    String annee = String(clock.year + 2000, DEC);
+    String mois = String(clock.month, DEC);
+    String jour = String(clock.dayOfMonth, DEC);
+    String filename = annee;
+    filename += mois;
+    filename += jour;
+    filename += ("_0.LOG");
+    char file[15];
+    filename.toCharArray(file, 15);
+
+    File datafile = SD.open(file);
+
+    if (datafile) {
+        //regarde si le fichier n'est pas plein
+        if (datafile.size() >= FILE_MAX_SIZE) {
+            Serial.println("Fichier plein, création d'un nouveau");
+            datafile.seek(0);
+            num_rev++;
+            String oldData;
+            while (datafile.available()) {
+                oldData += String(datafile.read(), DEC);
+                oldData += String("\n");
+            }
+            datafile.close();
+            SD.remove(file);
+            datafile = SD.open(file, FILE_WRITE);
+            if (datafile) {
+                datafile.println(stockage);
+                datafile.close();
+            }
+
+            filename = annee;
+            filename += mois;
+            filename += jour;
+            filename += String("_");
+            filename += String(num_rev, DEC);
+            filename += String(".LOG");
+            char file2[15];
+            filename.toCharArray(file2, 15);
+            datafile = SD.open(file2, FILE_WRITE);
+            if (datafile) {
+                datafile.println(oldData);
+                datafile.close();
+            }
+        } else {
+            datafile.close();
+            datafile = SD.open(file, FILE_WRITE);
+            datafile.println(stockage);
+            datafile.close();
+        }
+    }
 }

@@ -60,6 +60,10 @@ volatile int flag2 = 0;
 volatile int mode = 0;
 volatile unsigned long Compteur = 5000;
 
+// variable globale classique
+int num_rev;
+String saveSd;
+
 ChainableLED LED (7,8,1);
 
 

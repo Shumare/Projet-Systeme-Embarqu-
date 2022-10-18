@@ -8,7 +8,8 @@
 //float demandeDonnee(int port);
 
 String getTime();
-void enterNewParam();
+//void enterNewParam();
 void configEEPROM();
 void resetEEPROM();
+void stockSD(String saveSd);
 #endif
