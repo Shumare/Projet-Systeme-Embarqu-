@@ -17,6 +17,11 @@ ISR(TIMER1_COMPA_vect){
       //reactiveCapt();
     }
   }
+
+  if (ActiveTimeOut) {
+    Compteur--;
+  }
+
 }
 
 void init_timer(long uSecs){
@@ -103,12 +108,16 @@ void setup(){
 
   init_Interrupt();
 
+  initCapteur();
+
   Serial.print("Initializing SD card...");
+  pinMode(chipSelect, OUTPUT);
+
   if (!SD.begin(chipSelect)) {
-    Serial.println("Card failed, or not present");
-    while (1);
+    Serial.println("initialization failed!");
+    return;
   }
-  Serial.println("card initialized.");
+  Serial.println("initialization done.");
 
   while(!Serial);
   Serial.println("Programme de test du BME280");
@@ -149,48 +158,47 @@ void appelMode() {
 
 void loop(){
 
-/*
-  appelMode();*/
-  String dataString = getTime() + " ; ";
-  Serial.println(dataString);
-  // Affichage de la TEMPÉRATURE
-  Serial.print(F("Température = "));
-  Serial.print(bme.readTemperature());
-  Serial.println(F(" °C"));
+  /*
+    appelMode();
+    String dataString = getTime() + " ; ";
+    Serial.println(dataString);
+    // Affichage de la TEMPÉRATURE
+    Serial.print(F("Température = "));
+    Serial.print(bme.readTemperature());
+    Serial.println(F(" °C"));
 
-  // Affichage du TAUX D'HUMIDITÉ
-  Serial.print(F("Humidité = "));
-  Serial.print(bme.readHumidity());
-  Serial.println(F(" %"));
-  
-  // Affichage de la PRESSION ATMOSPHÉRIQUE
-  Serial.print(F("Pression atmosphérique = "));
-  Serial.print(bme.readPressure() / 100.0F);
-  Serial.println(F(" hPa"));
+    // Affichage du TAUX D'HUMIDITÉ
+    Serial.print(F("Humidité = "));
+    Serial.print(bme.readHumidity());
+    Serial.println(F(" %"));
 
-  // Affichage de l'estimation d'ALTITUDE
-  Serial.print(F("Altitude estimée = "));
-  Serial.print(bme.readAltitude(pressionAuNiveauDeLaMerEnHpa));
-  Serial.println(F(" m"));
+    // Affichage de la PRESSION ATMOSPHÉRIQUE
+    Serial.print(F("Pression atmosphérique = "));
+    Serial.print(bme.readPressure() / 100.0F);
+    Serial.println(F(" hPa"));
 
-    // GPS Reading
-  String gpsData = "";
-  if (SoftSerial.available())                     // if data is coming from software serial port ==> data is coming from SoftSerial GPS
-  {
-      bool t=true;
-      while(t){
-        gpsData = SoftSerial.readStringUntil('\n');
-        if (gpsData.startsWith("$GPGGA",0)){
-          t=false;
+    // Affichage de l'estimation d'ALTITUDE
+    Serial.print(F("Altitude estimée = "));
+    Serial.print(bme.readAltitude(pressionAuNiveauDeLaMerEnHpa));
+    Serial.println(F(" m"));
+
+      // GPS Reading
+    String gpsData = "";
+    if (SoftSerial.available())
+    {
+        bool t=true;
+        while(t){
+          gpsData = SoftSerial.readStringUntil('\n');
+          if (gpsData.startsWith("$GPGGA",0)){
+            t=false;
+          }
         }
-      }
-  }
-  Serial.println(gpsData);
+    }
+    Serial.println(gpsData);
 
-
-  // ... et on répète ce cycle à l'infini !
-  delay(delaiRafraichissementAffichage);                // Avec x secondes d'attente, avant chaque rebouclage
-  Serial.println(); 
-
+    delay(delaiRafraichissementAffichage);
+    Serial.println();
+  */
+  Serial.println(demandeDonnee(Capt_Hygr));
 }
 

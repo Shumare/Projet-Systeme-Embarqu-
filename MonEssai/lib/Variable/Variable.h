@@ -31,6 +31,7 @@ const int Bouton2 = 3; //Bouton vert
 //capteurs
 typedef struct capt {
     unsigned short port;
+    String name;
     bool active;
     int min;
     int max;
@@ -55,6 +56,7 @@ int FILE_MAX_SIZE = 4096;
 //volatile
 volatile bool flag1 = 0;
 volatile bool flag2 = 0;
+volatile bool ActiveTimeOut = 0;
 volatile int mode = 0;
 volatile unsigned long Compteur = 5000;
 
