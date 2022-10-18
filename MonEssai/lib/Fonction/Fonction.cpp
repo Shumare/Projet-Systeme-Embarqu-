@@ -72,13 +72,13 @@ void configEEPROM(capteur *E,int addresse){
 }
 void configEEPROM2(){
     if(EEPROM.read(10) == 255){
-    EEPROM.put(10,TIME_OUT);
+    EEPROM.put(10,TIME_OUT);      
     }
     if(EEPROM.read(11) == 255){
-    EEPROM.put(11,LOG_INTERVAL);
+    EEPROM.put(11,LOG_INTERVAL);      
     }
     if(EEPROM.read(13) == 255){
-    EEPROM.put(13,FILE_MAX_SIZE);
+    EEPROM.put(13,FILE_MAX_SIZE);      
     }
 }
 
