@@ -50,7 +50,8 @@ void switchMode1() {
       return;
     }
     mode = 1;
-    LED.setColorRGB(0,255,255,0);
+    LED.setColorRGB(0, 255, 255, 0);
+    Compteur = 30 * 60 * 1e6;
     return;
   }
 
@@ -187,19 +188,9 @@ void appelMode() {
 }*/
 
 void loop() {
-  
-  delay(1000);
-  Serial.println(Compteur);
-  Serial.println(mode);
-  Serial.print("port : ");
-  Serial.println(flag1);
-  Serial.print("port : ");
-  Serial.println(flag2);
-  Serial.print("mode : ");
-  Serial.println(mode);
 
 /*
-  appelMode();
+  appelMode();*/
   String dataString = getTime() + " ; ";
   Serial.println(dataString);
   // Affichage de la TEMPÉRATURE
@@ -239,7 +230,7 @@ void loop() {
 
   // ... et on répète ce cycle à l'infini !
   delay(delaiRafraichissementAffichage);                // Avec x secondes d'attente, avant chaque rebouclage
-  Serial.println(); */
+  Serial.println(); 
 
 }
 
