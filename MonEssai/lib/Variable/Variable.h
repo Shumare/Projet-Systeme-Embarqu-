@@ -48,21 +48,20 @@ capteur *Capt_Lumin = (capteur*)malloc(sizeof(capteur));
 capteur *Capt_Temp = (capteur*)malloc(sizeof(capteur));
 capteur *Capt_Hygr = (capteur*)malloc(sizeof(capteur));
 
-int TIME_OUT = 30000;
+int TIME_OUT = 30;
 long int LOG_INTERVAL = 600000;
 int FILE_MAX_SIZE = 4096;
 
-
-
 //volatile
-volatile int flag1 = 0;
-volatile int flag2 = 0;
+volatile bool flag1 = 0;
+volatile bool flag2 = 0;
 volatile int mode = 0;
 volatile unsigned long Compteur = 5000;
 
 // variable globale classique
 int num_rev;
 String saveSd;
+const int chipSelect = 4;
 
 ChainableLED LED (7,8,1);
 
