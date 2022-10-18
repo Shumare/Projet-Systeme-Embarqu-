@@ -26,35 +26,62 @@ void resetEEPROM() {
       delay(100);
    }
 }
+void initCapteur(){
+Capt_Pression->active = 1;
+Capt_Lumin->active = 1;
+Capt_Temp->active = 1;
+Capt_Hygr->active = 1;
 
-void configEEPROM(capteur *E,addresse){
+Capt_Pression -> min = 850;
+Capt_Pression -> max = 1080;
+Capt_Lumin -> min = 256;
+Capt_Lumin -> max = 768;
+Capt_Temp -> min = -10;
+Capt_Temp -> max = 60;
+Capt_Hygr -> min = 0;
+Capt_Hygr -> max = 50;
+
+Capt_Pression -> minCapteur = 300;
+Capt_Pression -> maxCapteur = 1100;
+Capt_Lumin -> minCapteur = 0;
+Capt_Lumin -> maxCapteur = 1023;
+Capt_Temp -> minCapteur = -40;
+Capt_Temp -> maxCapteur = 85;
+Capt_Hygr -> minCapteur = -40;
+Capt_Hygr-> maxCapteur = 85;
+
+Capt_Pression -> next = Capt_Lumin;
+Capt_Lumin -> next = Capt_Temp;
+Capt_Temp -> next = Capt_Hygr;
+Capt_Hygr-> next = NULL;
+}
+
+void configEEPROM(capteur *E,int addresse){
     if(E != NULL) {
         if(EEPROM.read (addresse) == 255){
             EEPROM.put(addresse,E -> min);
-            E-> minActuel = E -> min
+            E-> minActuel = E -> min;
             if(E -> min < 256){
-            addresse++
+            addresse++;
             }
             else{
                 addresse = addresse +2;
             }
             EEPROM.put(addresse,E -> max);
-            E-> maxActuel = E -> max
+            E-> maxActuel = E -> max;
             if(E -> max < 256){
-            addresse++
+            addresse++;
             }
             else{
                 addresse = addresse +2;
             }
         } 
-    }
     configEEPROM(E-> next,addresse);
+}
 }
 
 
-
-String getTime()
-{
+String getTime(){
     String time="";
     clock.getTime();
     time+=String(clock.hour, DEC);

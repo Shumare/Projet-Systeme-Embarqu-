@@ -41,47 +41,16 @@ typedef struct capt {
     struct capt *next;
 } capteur;
 
-capteur Capt_Pression;
-capteur Capt_Lumin;
-capteur Capt_Temp;
-capteur Capt_Hygr;
 
-Capt_Pression = malloc(sizeof(capteur));
-Capt_Lumin = malloc(sizeof(capteur));
-capt_Temp = malloc(sizeof(capteur));
-Capt_Hygr = malloc(sizeof(capteur));
 
-Capt_Pression -> active = 1;
-Capt_Lumin -> active = 1;
-Capt_Temp -> active = 1;
-Capt_Hygr -> active = 1;
+capteur *Capt_Pression = (capteur*)malloc(sizeof(capteur));
+capteur *Capt_Lumin = (capteur*)malloc(sizeof(capteur));
+capteur *Capt_Temp = (capteur*)malloc(sizeof(capteur));
+capteur *Capt_Hygr = (capteur*)malloc(sizeof(capteur));
 
-Capt_Pression -> min = 850;
-Capt_Pression -> max = 1080;
-Capt_Lumin -> min = 256;
-Capt_Lumin -> max = 768;
-Capt_Temp -> min = -10;
-Capt_Temp -> max = 60;
-Capt_Hygr -> min = 0;
-Capt_Hygr -> max = 50;
-
-Capt_Pression -> minCapteur = 300;
-Capt_Pression -> maxCapteur = 1100;
-Capt_Lumin -> minCapteur = 0;
-Capt_Lumin -> maxCapteur = 1023;
-Capt_Temp -> minCapteur = -40;
-Capt_Temp -> maxCapteur = 85;
-Capt_Hygr -> minCapteur = -40;
-Capt_Hygr-> maxCapteur = 85;
-
-Capt_Pression -> next = Capt_Lumin;
-Capt_Lumin -> next = Capt_Temp;
-Capt_Temp -> next = Capt_Hygr;
-Capt_Pression -> next = NULL;
-
-int TIME_OUT = 30000
-int LOG_INTERVAL = 600000
-int FILE_MAX_SIZE = 4096
+int TIME_OUT = 30000;
+long int LOG_INTERVAL = 600000;
+int FILE_MAX_SIZE = 4096;
 
 
 

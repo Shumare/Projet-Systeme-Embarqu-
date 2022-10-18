@@ -1,7 +1,7 @@
 #include "Fonction.cpp"
 
 
-ISR(TIMER1_COMPA_vect) {
+ISR(TIMER1_COMPA_vect){
   if((flag1 || flag2) == 1 && mode != 1) {
     if(Compteur) {
       Compteur--;
@@ -19,7 +19,7 @@ ISR(TIMER1_COMPA_vect) {
   }
 }
 
-void init_timer(long uSecs) {
+void init_timer(long uSecs){
   noInterrupts();
   TCCR1A = 0;
   TCCR1B = 0;
@@ -31,7 +31,7 @@ void init_timer(long uSecs) {
   interrupts();
 }
 
-void switchMode1() {
+void switchMode1(){
 
   if (flag1 == 1 && mode != 1) {
     flag1 = !digitalRead(Bouton1);
@@ -60,7 +60,7 @@ void switchMode1() {
 
 }
 
-void switchMode2() {
+void switchMode2(){
   if (flag2 == 1 && mode != 1) {
     flag2 = !digitalRead(Bouton2);
     if(Compteur == 0) {
@@ -83,14 +83,14 @@ void switchMode2() {
 }
 
 
-void init_Interrupt() {
+void init_Interrupt(){
   attachInterrupt(digitalPinToInterrupt(Bouton1),switchMode1,CHANGE);
   attachInterrupt(digitalPinToInterrupt(Bouton2),switchMode2,CHANGE);
 }
 
 
 
-void setup() {
+void setup(){
   // Initialisation du port série (pour l'envoi d'infos via le moniteur série de l'IDE Arduino)
   Serial.begin(9600);
   LED.init();
@@ -139,7 +139,7 @@ void appelMode() {
   }
 }*/
 
-void loop() {
+void loop(){
 
 /*
   appelMode();*/
