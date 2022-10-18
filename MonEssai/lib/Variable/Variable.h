@@ -58,7 +58,7 @@ Capt_Hygr -> active = 1;
 
 Capt_Pression -> min = 850;
 Capt_Pression -> max = 1080;
-Capt_Lumin -> min = 255;
+Capt_Lumin -> min = 256;
 Capt_Lumin -> max = 768;
 Capt_Temp -> min = -10;
 Capt_Temp -> max = 60;
@@ -78,6 +78,11 @@ Capt_Pression -> next = Capt_Lumin;
 Capt_Lumin -> next = Capt_Temp;
 Capt_Temp -> next = Capt_Hygr;
 Capt_Pression -> next = NULL;
+
+int TIME_OUT = 30000
+int LOG_INTERVAL = 600000
+int FILE_MAX_SIZE = 4096
+
 
 
 //volatile

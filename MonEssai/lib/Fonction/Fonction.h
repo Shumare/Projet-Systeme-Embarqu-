@@ -8,4 +8,7 @@
 //float demandeDonnee(int port);
 
 String getTime();
+void enterNewParam();
+void configEEPROM();
+void resetEEPROM();
 #endif
