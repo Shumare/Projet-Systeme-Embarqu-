@@ -10,6 +10,7 @@
 #include "SoftwareSerial.h"
 #include <SPI.h>
 #include <SD.h>
+#include <Adafruit_BME280.h>
 
 
 #define adresseI2CduBME280                0x76            // Adresse I2C du BME280 (0x76, qui est souvent la valeur par défaut)
@@ -17,6 +18,9 @@
 #define delaiRafraichissementAffichage    1500            // Délai de rafraîchissement de l'affichage (en millisecondes)
 
 SoftwareSerial SoftSerial(4, 5);
+DS1307 clock;
+// Instanciation de la librairie BME280
+Adafruit_BME280 bme;
 
 const int Bouton1 = 2; //Bouton rouge
 const int Bouton2 = 3; //Bouton vert
