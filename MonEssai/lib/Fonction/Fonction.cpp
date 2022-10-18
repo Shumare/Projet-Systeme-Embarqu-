@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "Arduino.h"
+#include <EEPROM.h>
+
 void enterNewParam(){
     char capteurModif;
     float valeurModif;

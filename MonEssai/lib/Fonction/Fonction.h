@@ -1,5 +1,6 @@
 #ifdef Fonction_H_INCLUDED
 #define Fonction_H_INCLUDED
+
 void enterNewParam(){
 }
 void checkParam(char capteurModif,float valeurModif){
