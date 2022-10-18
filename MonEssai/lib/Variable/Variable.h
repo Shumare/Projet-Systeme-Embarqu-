@@ -49,7 +49,7 @@ capteur *Capt_Temp = (capteur*)malloc(sizeof(capteur));
 capteur *Capt_Hygr = (capteur*)malloc(sizeof(capteur));
 
 int TIME_OUT = 30;
-long int LOG_INTERVAL = 600000;
+int LOG_INTERVAL = 600;
 int FILE_MAX_SIZE = 4096;
 
 //volatile
