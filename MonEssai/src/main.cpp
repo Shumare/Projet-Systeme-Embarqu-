@@ -96,11 +96,20 @@ void setup(){
   LED.init();
   pinMode(Bouton1, INPUT_PULLUP);
   pinMode(Bouton2, INPUT_PULLUP);
+  pinMode(4, INPUT);
+  pinMode(5, OUTPUT);
 
-  init_timer(1000);
+  init_timer(1e6);
 
   init_Interrupt();
-  
+
+  Serial.print("Initializing SD card...");
+  if (!SD.begin(chipSelect)) {
+    Serial.println("Card failed, or not present");
+    while (1);
+  }
+  Serial.println("card initialized.");
+
   while(!Serial);
   Serial.println("Programme de test du BME280");
   Serial.println("===========================");
@@ -117,8 +126,7 @@ void setup(){
     Serial.println(F("--> RÉUSSIE !"));
   }
   Serial.println();
-  pinMode(4, INPUT);
-  pinMode(5, OUTPUT);
+  
 
   SoftSerial.begin(9600);
 
