@@ -31,6 +31,7 @@ const int Bouton2 = 3; //Bouton vert
 //capteurs
 typedef struct capt {
     unsigned short port;
+    String name;
     bool active;
     int min;
     int max;
@@ -38,7 +39,6 @@ typedef struct capt {
     int maxCapteur;
     int minActuel;
     int maxActuel;
-    String name;
     struct capt *next;
 } capteur;
 
@@ -50,7 +50,7 @@ capteur *Capt_Temp = (capteur*)malloc(sizeof(capteur));
 capteur *Capt_Hygr = (capteur*)malloc(sizeof(capteur));
 
 int TIME_OUT = 30;
-int LOG_INTERVAL = 600;
+long int LOG_INTERVAL = 600000;
 int FILE_MAX_SIZE = 4096;
 
 //volatile
@@ -59,7 +59,7 @@ volatile bool flag2 = 0;
 volatile bool ActiveTimeOut = 0;
 volatile int mode = 0;
 volatile int mode_prece = 0;
-volatile unsigned long Compteur = 5000;
+volatile unsigned long Compteur = 5;
 
 // variable globale classique
 int num_rev;
