@@ -58,7 +58,8 @@ volatile bool flag1 = 0;
 volatile bool flag2 = 0;
 volatile bool ActiveTimeOut = 0;
 volatile int mode = 0;
-volatile unsigned long Compteur = 5000;
+volatile int mode_prece = 0;
+volatile unsigned long Compteur = 5;
 
 // variable globale classique
 int num_rev;

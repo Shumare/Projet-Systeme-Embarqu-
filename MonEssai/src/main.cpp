@@ -110,18 +110,18 @@ void setup(){
 
   initCapteur();
 
-  Serial.print("Initializing SD card...");
+  Serial.print(F("Initializing SD card..."));
   pinMode(chipSelect, OUTPUT);
 
   if (!SD.begin(chipSelect)) {
-    Serial.println("initialization failed!");
+    Serial.println(F("initialization failed!"));
     return;
   }
-  Serial.println("initialization done.");
+  Serial.println(F("initialization done.");
 
   while(!Serial);
   Serial.println("Programme de test du BME280");
-  Serial.println("===========================");
+  Serial.println("==========================="));
   Serial.println();
 
   // Initialisation du BME280
@@ -150,7 +150,7 @@ void appelMode() {
   } else if (mode == 1) {
     Configuration();
   } else if (mode == 2) {
-    Maintenance();
+    Maintenance(LOG_INTERVAL);
   } else if (mode == 3) {
     Economique();
   }
@@ -159,7 +159,8 @@ void appelMode() {
 void loop(){
 
   /*
-    appelMode();
+    // appelMode();
+  
     String dataString = getTime() + " ; ";
     Serial.println(dataString);
     // Affichage de la TEMPÉRATURE
@@ -196,9 +197,10 @@ void loop(){
     }
     Serial.println(gpsData);
 
-    delay(delaiRafraichissementAffichage);
-    Serial.println();
-  */
-  Serial.println(demandeDonnee(Capt_Hygr));
+
+  // ... et on répète ce cycle à l'infini !
+  delay(delaiRafraichissementAffichage);                // Avec x secondes d'attente, avant chaque rebouclage
+  Serial.println();
+*/
 }
 

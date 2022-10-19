@@ -2,16 +2,23 @@
 #define Fonction_H_INCLUDED
 #include "Variable.h"
 
-//void enterNewParam();
-//void checkParam(char capteurModif,float valeurModif);
-//void modifParam(char capteurModif,float valeurModif);
-//float demandeDonnee(int port);
+
 
 String getTime();
-// void enterNewParam();
+void voirEEPROM();
+void resetEEPROM();
 void initCapteur();
 void configEEPROM();
-void resetEEPROM();
+void stockVariable();
+void setupMaxMin();
+void voirMinMax();
 void stockSD(String saveSd);
-String demandeDonnee(void);
+void desactiveCapteur();
+void reactiveCapteur();
+String demandeDonnee(capteur *Capt_Hygr);
+void enterNewParam();
+void checkParam(String capteurModif, float valeurModif);
+
+
+
 #endif
