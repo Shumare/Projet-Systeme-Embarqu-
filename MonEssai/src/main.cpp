@@ -59,7 +59,7 @@ void switchMode1(){
 
   if (flag1 == 0 && mode != 1) {
     flag1 = !digitalRead(Bouton1);
-    Compteur = 5000;
+    Compteur = 5;
   }
 
 }
@@ -81,7 +81,7 @@ void switchMode2(){
 
   if (flag2 == 0 && mode != 1) {
     flag2 = !digitalRead(Bouton2);
-    Compteur = 5000;
+    Compteur = 5;
   }
 
 }
