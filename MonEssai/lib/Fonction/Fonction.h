@@ -5,6 +5,8 @@
 
 
 String getTime();
+void Standard();
+void demarrage();
 void voirEEPROM();
 void resetEEPROM();
 void initCapteur();

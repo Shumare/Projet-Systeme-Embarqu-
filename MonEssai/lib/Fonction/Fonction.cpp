@@ -2,6 +2,71 @@
 #include <stdlib.h>
 
 #include "Fonction.h"
+bool erreur(capteur *Capt,float donnee){
+    if (Capt->minActuel < donnee < Capt->maxActuel){
+        return(true);
+    }else{
+        return false;
+    }
+}
+
+void processusErreur(String Capt,int var){
+  
+  //erreur accés horloge
+  if (Capt == String("RTC")){
+    while(Bloqueur != 5){
+    LED.setColorRGB(0,100,0,0);
+    delay(500);
+    LED.setColorRGB(0,0,0,100);
+    delay(500);
+    }
+  }
+  //erreur accés GPS
+  if (Capt == String("GPS")){
+    while(Bloqueur != 5){
+    LED.setColorRGB(0,100,0,0);
+    delay(500);
+    LED.setColorRGB(0,50,50,0);
+    delay(500);
+    }
+  }
+  //erreur accés capteurs
+  if (((Capt == String("Lumin"))|| (Capt == String("Pression")) || (Capt == String("Temp"))|| (Capt == String("Hygr"))) && (var == 0)){
+    while(Bloqueur != 5){
+    LED.setColorRGB(0,100,0,0);
+    delay(500);
+    LED.setColorRGB(0,0,100,0);
+    delay(500);
+    }
+  }
+  //erreur capteurs incohérents
+  if (((Capt == String("Lumin"))|| (Capt == String("Pression")) || (Capt == String("Temp"))|| (Capt == String("Hygr"))) && (var == 1)){
+    while(Bloqueur != 5){
+    LED.setColorRGB(0,100,0,0);
+    delay(333);
+    LED.setColorRGB(0,0,100,0);
+    delay(666);
+    }
+  }
+  //erreurs accés ou écriture carte SD
+  if (Capt == String("SD") && var == 1){
+    while(Bloqueur != 5){
+    LED.setColorRGB(0,100,0,0);
+    delay(500);
+    LED.setColorRGB(0,33,33,33);
+    delay(500);
+    }
+  }
+  //carte SD pleine
+  if ((Capt == String("SD")) && var == 0){
+    while(Bloqueur != 5){
+    LED.setColorRGB(0,100,0,0);
+    delay(333);
+    LED.setColorRGB(0,33,33,33);
+    delay(666);
+    }
+  }
+}
 
 void voirEEPROM() {
     int address = 0;
@@ -68,6 +133,7 @@ void initCapteur(){
     Capt_Lumin -> name = "Lumin";
     Capt_Temp -> name = "Temp";
     Capt_Hygr -> name = "Hygr";
+
 }
 
 void configEEPROM(){
@@ -167,7 +233,6 @@ String getTime(){
 }
 
 void stockSD(String stockage) {
-    //création du nom de fichier
     clock.getTime();
     String annee = String(clock.year + 2000, DEC);
     String mois = String(clock.month, DEC);
@@ -176,50 +241,15 @@ void stockSD(String stockage) {
     filename += mois;
     filename += jour;
     filename += ("_0.LOG");
-    char file[15];
-    filename.toCharArray(file, 15);
-
-    File datafile = SD.open(file);
-
-    if (datafile) {
-        //regarde si le fichier n'est pas plein
-        if (datafile.size() >= FILE_MAX_SIZE) {
-            Serial.println("Fichier plein, création d'un nouveau");
-            datafile.seek(0);
-            num_rev++;
-            String oldData;
-            while (datafile.available()) {
-                oldData += String(datafile.read(), DEC);
-                oldData += String("\n");
-            }
-            datafile.close();
-            SD.remove(file);
-            datafile = SD.open(file, FILE_WRITE);
-            if (datafile) {
-                datafile.println(stockage);
-                datafile.close();
-            }
-
-            filename = annee;
-            filename += mois;
-            filename += jour;
-            filename += String("_");
-            filename += String(num_rev, DEC);
-            filename += String(".LOG");
-            char file2[15];
-            filename.toCharArray(file2, 15);
-            datafile = SD.open(file2, FILE_WRITE);
-            if (datafile) {
-                datafile.println(oldData);
-                datafile.close();
-            }
-        } else {
-            datafile.close();
-            datafile = SD.open(file, FILE_WRITE);
-            datafile.println(stockage);
-            datafile.close();
-        }
-    }
+    if(!SD.begin(4)){
+        Serial.println("Erreur acces carte SD !");
+        processusErreur("SD",0);
+    };
+    Serial.println(F("Initialisation de la carte SD faite"));
+    File data=SD.open(filename,FILE_WRITE);
+    data.println(stockage);
+    delay(100);
+    data.close();
 }
 
 String demandeDonnee(capteur *Capt) {
@@ -341,7 +371,7 @@ void checkParam(String capteurModif, float valeurModif){
     }
     if(capteurModif == "LUMIN_LOW"){
         if(valeurModif > Capt_Lumin->min){
-        Capt_Lumin -> min = valeurModif;
+        Capt_Lumin -> minActuel = valeurModif;
         }
         else{
             Serial.println("Valeur non valide");
@@ -349,7 +379,7 @@ void checkParam(String capteurModif, float valeurModif){
     }
     if(capteurModif == "LUMIN_HIGH"){
         if(valeurModif < Capt_Lumin->max){
-        Capt_Lumin -> max = valeurModif;
+        Capt_Lumin -> maxActuel = valeurModif;
         }
         else{
             Serial.println("Valeur non valide");
@@ -357,7 +387,7 @@ void checkParam(String capteurModif, float valeurModif){
     }
     if(capteurModif == "MIN_TEMP_AIR"){
         if(valeurModif > Capt_Temp->min){
-        Capt_Temp -> min = valeurModif;
+        Capt_Temp -> minActuel = valeurModif;
         }
         else{
             Serial.println("Valeur non valide");
@@ -365,7 +395,7 @@ void checkParam(String capteurModif, float valeurModif){
     }
     if(capteurModif == "MAX_TEMP_AIR"){
         if(valeurModif < Capt_Temp->max){
-        Capt_Temp -> min = valeurModif;
+        Capt_Temp -> maxActuel = valeurModif;
         }
         else{
             Serial.println("Valeur non valide");
@@ -373,7 +403,7 @@ void checkParam(String capteurModif, float valeurModif){
     }
     if(capteurModif == "HYGR_MINT"){
         if(valeurModif > Capt_Hygr->min){
-        Capt_Hygr -> min = valeurModif;
+        Capt_Hygr -> minActuel = valeurModif;
         }
         else{
             Serial.println("Valeur non valide");
@@ -381,7 +411,7 @@ void checkParam(String capteurModif, float valeurModif){
     }
     if(capteurModif == "HYGR_MAXT"){
         if(valeurModif < Capt_Hygr->max){
-        Capt_Hygr -> max = valeurModif;
+        Capt_Hygr -> maxActuel = valeurModif;
         }
         else{
             Serial.println("Valeur non valide");
@@ -396,4 +426,18 @@ void checkParam(String capteurModif, float valeurModif){
     if(capteurModif == "FILE_MAX_SIZE"){
         FILE_MAX_SIZE = valeurModif;
     }
+    if(capteurModif == "RESET"){
+        resetEEPROM();
+        configEEPROM();
+        setupMaxMin();
+    }
+    stockVariable();
+}
+
+void demarrage(){
+    initCapteur();
+    resetEEPROM();
+    configEEPROM();
+    setupMaxMin();
+    Standard();
 }

@@ -21,7 +21,6 @@ ISR(TIMER1_COMPA_vect){
   if (ActiveTimeOut) {
     Compteur--;
   }
-
 }
 
 void init_timer(long uSecs){
@@ -95,6 +94,30 @@ void init_Interrupt(){
 
 
 
+void Configuration() {
+  desactiveCapteur();
+  enterNewParam();
+}
+
+void Standard(){
+    LED.setColorRGB(0,0,50,0);
+    Serial.begin(9600);
+    String StockageDonneeTempo;
+    String Stockage;
+    String DetectionAcces = "non";
+    String DetectionInvalide = "non";
+    delay(LOG_INTERVAL);
+    Serial.println("On demarre");
+    StockageDonneeTempo = demandeDonnee(Capt_Pression);
+    if (!erreur(Capt_Pression, StockageDonneeTempo.toFloat())) {
+        processusErreur(Capt_Pression->name, 1);
+    }
+    Stockage = Stockage + " " + String(StockageDonneeTempo);
+    stockSD(Stockage);
+}
+
+void Economique() {}
+
 void setup(){
   // Initialisation du port série (pour l'envoi d'infos via le moniteur série de l'IDE Arduino)
   Serial.begin(9600);
@@ -108,20 +131,11 @@ void setup(){
 
   init_Interrupt();
 
-  initCapteur();
 
-  Serial.print(F("Initializing SD card..."));
-  pinMode(chipSelect, OUTPUT);
-
-  if (!SD.begin(chipSelect)) {
-    Serial.println(F("initialization failed!"));
-    return;
-  }
-  Serial.println(F("initialization done.");
 
   while(!Serial);
-  Serial.println("Programme de test du BME280");
-  Serial.println("==========================="));
+  Serial.println(F("Programme de test du BME280"));
+  Serial.println(F("==========================="));
   Serial.println();
 
   // Initialisation du BME280
@@ -141,7 +155,24 @@ void setup(){
 
   //Initialize Clock
   clock.begin();
+  demarrage();
+  
 }
+
+/*
+void Maintenance() {
+  String StockageDonneTempo;
+  capteur *inter = (capteur *)malloc(sizeof(capteur));
+  inter = Capt_Pression;
+  while (inter != NULL) {
+    StockageDonneTempo = demandeDonnee(inter);
+    if (erreur(inter, StockageDonneTempo)) {
+      Serial.println(StockageDonneTempo);
+    }
+    inter = inter->next;
+  }
+}
+*/
 
 /*
 void appelMode() {
@@ -160,7 +191,7 @@ void loop(){
 
   /*
     // appelMode();
-  
+
     String dataString = getTime() + " ; ";
     Serial.println(dataString);
     // Affichage de la TEMPÉRATURE
@@ -199,8 +230,8 @@ void loop(){
 
 
   // ... et on répète ce cycle à l'infini !
-  delay(delaiRafraichissementAffichage);                // Avec x secondes d'attente, avant chaque rebouclage
-  Serial.println();
+  delay(delaiRafraichissementAffichage);                // Avec x secondes
+  d'attente, avant chaque rebouclage Serial.println();
 */
 }
 
