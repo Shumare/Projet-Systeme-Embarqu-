@@ -246,10 +246,11 @@ void stockSD(String stockage) {
         processusErreur("SD",0);
     };
     Serial.println(F("Initialisation de la carte SD faite"));
-    File data=SD.open(filename,FILE_WRITE);
+    File data=SD.open("Test.log",FILE_WRITE);
     data.println(stockage);
     delay(100);
     data.close();
+    Serial.println(F("Fin carte SD"));
 }
 
 String demandeDonnee(capteur *Capt) {

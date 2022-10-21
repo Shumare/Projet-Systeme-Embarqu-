@@ -52,7 +52,7 @@ void switchMode1(){
     }
     mode = 1;
     LED.setColorRGB(0, 255, 255, 0);
-    Compteur = 30 * 60 * 1e6;
+    Compteur = 30 * 60;
     return;
   }
 
@@ -103,10 +103,26 @@ void Standard(){
     LED.setColorRGB(0,0,50,0);
     Serial.begin(9600);
     String StockageDonneeTempo;
-    String Stockage;
+    String Stockage = getTime();
     String DetectionAcces = "non";
     String DetectionInvalide = "non";
     delay(LOG_INTERVAL);
+    Serial.println("On demarre");
+    StockageDonneeTempo = demandeDonnee(Capt_Temp);
+    if (!erreur(Capt_Temp, StockageDonneeTempo.toFloat())) {
+        processusErreur(Capt_Temp->name, 1);
+    }
+    Stockage = Stockage + " " + String(StockageDonneeTempo);
+    stockSD(Stockage);
+}
+
+void Economique() {
+    Serial.begin(9600);
+    String StockageDonneeTempo;
+    String Stockage = getTime();
+    String DetectionAcces = "non";
+    String DetectionInvalide = "non";
+    delay(LOG_INTERVAL*2);
     Serial.println("On demarre");
     StockageDonneeTempo = demandeDonnee(Capt_Pression);
     if (!erreur(Capt_Pression, StockageDonneeTempo.toFloat())) {
@@ -116,8 +132,21 @@ void Standard(){
     stockSD(Stockage);
 }
 
-void Economique() {}
-
+void Maintenance(){
+    Serial.begin(9600);
+    String StockageDonneeTempo;
+    String Stockage = getTime();
+    String DetectionAcces = "non";
+    String DetectionInvalide = "non";
+    delay(LOG_INTERVAL);
+    Serial.println("On demarre");
+    StockageDonneeTempo = demandeDonnee(Capt_Pression);
+    if (!erreur(Capt_Pression, StockageDonneeTempo.toFloat())) {
+        processusErreur(Capt_Pression->name, 1);
+    }
+    Stockage = Stockage + " " + String(StockageDonneeTempo);
+    Serial.println(Stockage);
+}
 void setup(){
   // Initialisation du port série (pour l'envoi d'infos via le moniteur série de l'IDE Arduino)
   Serial.begin(9600);
